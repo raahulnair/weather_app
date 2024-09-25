@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(WeatherApp());
+  runApp(WeatherInfoApp());
 }
 
-class WeatherApp extends StatelessWidget {
+class WeatherInfoApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Weather Info App',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
+      theme: ThemeData(primarySwatch: Colors.blue),
       home: WeatherHomePage(),
     );
   }
@@ -23,51 +21,46 @@ class WeatherHomePage extends StatefulWidget {
 }
 
 class _WeatherHomePageState extends State<WeatherHomePage> {
-  List<String> forecast = []; // Placeholder list to store forecast details
-
-  // Simulate fetching the 7-day forecast
-  void fetchWeatherForecast() {
-    setState(() {
-      // Example static data, you can replace this with API data
-      forecast = [
-        'Day 1: Sunny, 75°F',
-        'Day 2: Cloudy, 70°F',
-        'Day 3: Rainy, 68°F',
-        'Day 4: Sunny, 80°F',
-        'Day 5: Windy, 72°F',
-        'Day 6: Thunderstorms, 65°F',
-        'Day 7: Partly Cloudy, 74°F',
-      ];
-    });
-  }
+  TextEditingController _cityController = TextEditingController();
+  String cityName = "";
+  String weatherInfo = "No data available";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Weather Info App'),
-      ),
-      body: Column(
-        children: [
-          SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: fetchWeatherForecast,
-            child: Text('Get 7-Day Forecast'),
-          ),
-          SizedBox(height: 20),
-          forecast.isEmpty
-              ? Text('No forecast available')
-              : Expanded(
-                  child: ListView.builder(
-                    itemCount: forecast.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(forecast[index]),
-                      );
-                    },
-                  ),
-                ),
-        ],
+      appBar: AppBar(title: Text('Weather Info App')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: _cityController,
+              decoration: InputDecoration(
+                labelText: 'Enter city name',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  cityName = _cityController.text;
+                });
+              },
+              child: Text('Fetch Weather'),
+            ),
+            SizedBox(height: 16),
+            Text(
+              'City: $cityName',
+              style: TextStyle(fontSize: 20),
+            ),
+            Text(
+              'Weather Info: $weatherInfo',
+              style: TextStyle(fontSize: 20),
+            ),
+          ],
+        ),
       ),
     );
   }
